@@ -1,15 +1,20 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.4.22 <0.9.0;
+pragma solidity >=0.4.1 <0.9.0;
 
 contract DappToken {
-    // Constructor
-    // Set total num of tokens
-    // Read total num of tokens
 
-    // declare variables
+    string public name = "Dapp Token";
+    string public symbol = "DAPP";
+    string public standard = "DApp Token v1.0";
     uint256 public totalSupply;
 
-    constructor() public {
-        totalSupply = 1000000;
+    mapping(address => uint256) public balanceOf;
+
+    constructor(uint256 _initialSupply) public {
+        // totalSupply = 1000000;
+        balanceOf[msg.sender] = _initialSupply;
+        totalSupply = _initialSupply;
     }
+
+
 }
