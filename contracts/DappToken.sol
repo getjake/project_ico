@@ -8,8 +8,14 @@ contract DappToken {
 
     // declare variables
     uint256 public totalSupply;
+    
+    mapping(address => uint256) public balanceOf;
 
-    constructor() public {
-        totalSupply = 1000000;
+
+    constructor(uint256 _initialSupply) public {
+        totalSupply = _initialSupply;
+        // allocate initial supply
     }
+
+    // function balanceOf
 }
