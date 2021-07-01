@@ -7,6 +7,8 @@ contract DappToken {
     string public symbol = "DAPP";
     string public standard = "DApp Token v1.0";
     uint256 public totalSupply;
+    
+    mapping(address => uint256) public balanceOf;
 
     mapping(address => uint256) public balanceOf;
 
