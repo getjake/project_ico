@@ -2,6 +2,7 @@ const DappTokenSale = artifacts.require("./DappTokenSale.sol");
 const DappToken = artifacts.require("./DappToken.sol");
 
 contract('DappTokenSale', function(accounts) {
+    // 下面 3 个 it 有先后承接因果关系
     var tokenInstance;
     var tokenSaleInstance;
     var numberOfTokens = 10; // number of tokens to buy
@@ -60,4 +61,31 @@ contract('DappTokenSale', function(accounts) {
         });
     });
 
+
+    it('ends token sale', function() {
+        return DappToken.deployed().then(function(instance) {
+            tokenInstance = instance;
+            return DappTokenSale.deployed();
+        }).then(function(instance) {
+            tokenSaleInstance = instance;
+            // Try to end sale from account other than the admin.
+            return tokenSaleInstance.endSale({ from: buyer });
+        }).then(assert.fail).catch(function(error){
+            // console.log(error);
+            assert(error.hijackedStack.indexOf('revert' >= 0, 'the users other than admin cannot call this function.'))
+            // End sale as admin.
+            return tokenSaleInstance.endSale({ from: admin });
+        }).then(function(receipt) {
+            return tokenInstance.balanceOf(admin);
+        }).then(function(balance) {
+            assert.equal(balance.toNumber(), 999990, 'returns all unsold DappToken to admin');
+            // Check that token price was reset then selfDestruct was called
+            return tokenSaleInstance.tokenPrice;
+        }).then(function(price) {
+            // Check that the contract has no balance
+            // balance = web3.eth.getBalance(tokenSaleInstance.address)
+            // assert.equal(balance.toNumber(), 0);
+        })
+
+    });
 });

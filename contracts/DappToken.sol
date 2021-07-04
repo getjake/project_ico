@@ -30,7 +30,7 @@ contract DappToken {
         totalSupply = _initialSupply;
     }
 
-    // Transfer
+    // Transfer DappTokens
     function transfer(address _to, uint256 _value) public returns (bool success) {
         // Exception if account doesnt have enough bal.
         require(balanceOf[msg.sender] >= _value);
